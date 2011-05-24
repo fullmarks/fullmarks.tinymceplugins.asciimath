@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="fullmarks.tinymceplugins.asciimath">
+
+    <genericsetup:registerProfile
+        name="default"
+        title="ASCIMATH editor plugin for TinyMCE"
+        directory="profiles/default"
+        description='ASCIMATH editor plugin for TinyMCE'
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>
