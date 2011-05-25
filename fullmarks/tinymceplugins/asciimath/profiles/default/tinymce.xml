@@ -8,6 +8,7 @@
     <toolbar>
         <customtoolbarbuttons purge="False">
             <element value="asciimath"/>
+            <element value="asciimathcharmap"/>
         </customtoolbarbuttons>
     </toolbar>
 </object>
