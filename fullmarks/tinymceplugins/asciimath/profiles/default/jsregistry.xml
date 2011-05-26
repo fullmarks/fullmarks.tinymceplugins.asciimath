@@ -4,7 +4,7 @@
              compression="none"
              cookable="True"
              enabled="True"
-             expression="not: portal/portal_membership/isAnonymousUser"
+             expression=""
              id="asciimath/js/ASCIIMathML.js"
              inline="False"/>
 </object>
