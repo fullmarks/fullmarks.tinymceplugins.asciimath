@@ -3325,8 +3325,8 @@ function generic()
 };
 /* we need to initialize symbols before the page has loaded to allow
    Wysiwyg editors like TinyMCE to parse math when they load. The editor
-   loads before the page has completed loading causing plugins that want
-   to convert expresssion to fail
+   loads before the page loads causing plugins that want to convert
+   expresssion to fail
 */
 if (!noMathML) initSymbols();
 
