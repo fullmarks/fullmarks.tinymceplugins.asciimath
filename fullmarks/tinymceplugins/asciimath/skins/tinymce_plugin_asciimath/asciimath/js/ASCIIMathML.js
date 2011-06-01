@@ -858,7 +858,6 @@ function AMparseExpr(str,rightbracket) {
 function parseMath(str,latex) {
   var frag, node;
   AMnestingDepth = 0;
-  console.log('parseMath: ' + str);
   frag = latex ? LMparseExpr(str.replace(/^\s+/g,""),false,false)[0] : AMparseExpr(str.replace(/^\s+/g,""),false)[0];
   node = createMmlNode("mstyle",frag);
   node.setAttribute("mathcolor",mathcolor);
@@ -3312,7 +3311,6 @@ var calcstr = "<table align=\"center\">\n<tr><th>\nASCIIMath Scientific Calculat
 //onload function (replaces the onload="translate()" in the <body> tag)
 function generic()
 {
-    console.log('generic');
   if(!init()) return;
   if (translateOnLoad) {
     var nd = document.getElementById("processasciimathinmoodle");
