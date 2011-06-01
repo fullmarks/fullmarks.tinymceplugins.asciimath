@@ -60,7 +60,7 @@
                     AMTcgiloc = ""; 
                 }
                 ed.windowManager.open({
-                    file : url + '/amcharmap.htm',
+                    file : url + '/amcharmap',
                     width : 630 + parseInt(ed.getLang('asciimathdlg.delta_width', 0)),
                     height : 390 + parseInt(ed.getLang('asciimathdlg.delta_height', 0)),
                     inline : 1
@@ -187,6 +187,7 @@
             });
 
             ed.onNodeChange.add(function(ed, cm, e) {
+                console.log('onNodeChange');
                 var doprocessnode = true;
                 if (t.testAMclass(e)) {
                     p = e;
@@ -235,6 +236,10 @@
                 }
             });
 
+            ed.onClick.add(function(ed, e) {
+                console.debug('Editor was clicked: ' + e.target.nodeName);
+            });
+
         },
 
         /**
@@ -274,12 +279,8 @@
             if (tinymce.isIE) {
                   var str = outnode.innerHTML.replace(/\`/g,"");
                   str.replace(/\"/,"&quot;");
-                   var newAM = document.createElement("span");
-                  if (AMnoMathML) {
-                      newAM.appendChild(AMTparseMath(str));
-                  } else {
-                      newAM.appendChild(AMparseMath(str));
-                  }
+                  var newAM = document.createElement("span");
+                  newAM.appendChild(AMparseMath(str));
                   outnode.innerHTML = newAM.innerHTML;    
               } else {
                   //doesn't work on IE, probably because this script is in the parent
