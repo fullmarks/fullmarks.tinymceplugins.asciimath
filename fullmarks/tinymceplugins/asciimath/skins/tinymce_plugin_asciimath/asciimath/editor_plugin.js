@@ -187,7 +187,6 @@
             });
 
             ed.onNodeChange.add(function(ed, cm, e) {
-                console.log('onNodeChange');
                 var doprocessnode = true;
                 if (t.testAMclass(e)) {
                     p = e;
@@ -237,7 +236,21 @@
             });
 
             ed.onClick.add(function(ed, e) {
-                console.debug('Editor was clicked: ' + e.target.nodeName);
+                if (t.lastAMnode != null && e.target != t.lastAMnode) {
+                    if (t.lastAMnode.innerHTML.match(/`(&nbsp;|\s)*`/)|| t.lastAMnode.innerHTML.match(/^(&nbsp;|\s|\u00a0|&#160;)*$/)) {
+                        p = t.lastAMnode.parentNode;
+                        p.removeChild(t.lastAMnode);
+                    } else {
+                        t.nodeToAM(t.lastAMnode);  
+                        t.lastAMnode.className = 'AM'; 
+                    }
+                    t.lastAMnode = null;
+                    e.target.innerHTML = e.target.innerHTML + '<span id="removeme"></span>'
+                    ed.selection.select(ed.dom.get('removeme'));
+                    ed.dom.remove('removeme');
+                    ed.selection.collapse(true);
+                    ed.nodeChanged();
+                }
             });
 
         },
