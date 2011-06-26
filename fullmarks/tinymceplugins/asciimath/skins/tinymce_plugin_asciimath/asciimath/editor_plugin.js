@@ -16,22 +16,27 @@
 
     tinymce.create('tinymce.plugins.AsciimathPlugin', {
         /**
-         * Initializes the plugin, this will be executed after the plugin has been created.
-         * This call is done before the editor instance has finished it's initialization so use the onInit event
-         * of the editor instance to intercept that event.
-         *
-         * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
+         * Initializes the plugin, this will be executed after the
+         * plugin has been created.This call is done before the editor
+         * instance has finished it's initialization so use the onInit
+         * event of the editor instance to intercept that event.
+         * @param {tinymce.Editor} ed Editor instance that the plugin is
+         * initialized in.
          * @param {string} url Absolute URL to where the plugin is located.
          */
         init : function(ed, url) {
             var t = this;
-            
-            // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceAsciimath');
+
+            // Register the command so that it can be invoked by using
+            // tinyMCE.activeEditor.execCommand('mceAsciimath');
+
             ed.addCommand('mceAsciimath', function(val) {
 
                 if (t.lastAMnode==null) {
                     existing = ed.selection.getContent();
-                    if (existing.indexOf('class=AM')==-1) { //existing does not contain an AM node, so turn it into one
+                    // existing does not contain an AM node, so turn it
+                    // into one
+                    if (existing.indexOf('class=AM')==-1) {
                            //strip out all existing html tags.
                            existing = existing.replace(/<([^>]*)>/g,"");
                            existing = existing.replace(/&(.*?);/g,"$1");
@@ -54,15 +59,17 @@
                 }
                 
             });
-            
+
             ed.addCommand('mceAsciimathDlg', function() {
                 if (typeof AMTcgiloc == 'undefined') {
                     AMTcgiloc = ""; 
                 }
                 ed.windowManager.open({
                     file : url + '/amcharmap',
-                    width : 630 + parseInt(ed.getLang('asciimathdlg.delta_width', 0)),
-                    height : 390 + parseInt(ed.getLang('asciimathdlg.delta_height', 0)),
+                    width : 630 + parseInt(
+                        ed.getLang('asciimathdlg.delta_width', 0)),
+                    height : 390 + parseInt(
+                        ed.getLang('asciimathdlg.delta_height', 0)),
                     inline : 1
                 }, {
                     plugin_url : url, // Plugin absolute URL
@@ -70,14 +77,16 @@
                 });
                 
             });
-            
+
             ed.onKeyPress.add(function(ed, ev) {
                 var key = String.fromCharCode(ev.charCode || ev.keyCode);
                 if (key=='`') {
                     if (t.lastAMnode == null) {
                         existing = ed.selection.getContent();
-                        if (existing.indexOf('class=AM')==-1) { //existing does not contain an AM node, so turn it into one
-                               //strip out all existing html tags.
+                        // existing does not contain an AM node, so turn
+                        // it into one
+                        if (existing.indexOf('class=AM')==-1) { 
+                               // strip out all existing html tags.
                                existing = existing.replace(/<([^>]*)>/g,"");
                                entity = '<span class=AMedit>`'+existing+'<span id="removeme"></span>`</span> ';
                             
@@ -101,31 +110,21 @@
                        }
                 }
             });
-            
+
             // Register asciimath button
             ed.addButton('asciimath', {
                 title : 'asciimath.desc',
                 cmd : 'mceAsciimath',
                 image : url + '/img/ed_mathformula2.gif'
             });
-            
+
             ed.addButton('asciimathcharmap', {
                 title : 'asciimathcharmap.desc',
                 cmd : 'mceAsciimathDlg',
                 image : url + '/img/ed_mathformula.gif'
             });
-            /*
-            ed.onInit.add(function(ed) {
-                    AMtags = ed.dom.select('span.AM');
-                    for (var i=0; i<AMtags.length; i++) {
-                        t.nodeToAM(AMtags[i]);
-                    }
-            });
-            */
+
             ed.onPreInit.add(function(ed) {
-                //took out - was triggering on toolbar clicks
-                //tinymce.dom.Event.add(ed.getWin(), 'blur', function(e) {  
-                //});
                 if (tinymce.isIE) {
                     addhtml = "<object id=\"mathplayer\" classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>";
                     addhtml +="<?import namespace=\"m\" implementation=\"#mathplayer\"?>";
@@ -134,7 +133,7 @@
                 }
                 
             });
-            
+
             ed.onPreProcess.add(function(ed,o) {
                 if (o.get) {
                     AMtags = ed.dom.select('span.AM', o.node);
@@ -151,16 +150,6 @@
                 } 
             });
 
-            
-            /*
-            ed.onLoadContent.add(function(ed,o) {
-                AMtags = ed.dom.select('span.AM');
-                for (var i=0; i<AMtags.length; i++) {
-                    t.nodeToAM(AMtags[i]);
-                }
-            });
-            */
-            
             ed.onBeforeGetContent.add(function(ed,cmd) {
                 AMtags = ed.dom.select('span.AM');
                 for (var i=0; i<AMtags.length; i++) {
@@ -210,7 +199,9 @@
                         doprocessnode = false;
                     }
                 }
-                if (doprocessnode && (t.lastAMnode != null)) { //if not in AM node, process last
+
+                // if not in AM node, process last
+                if (doprocessnode && (t.lastAMnode != null)) { 
                      if (t.lastAMnode.innerHTML.match(/`(&nbsp;|\s|\u00a0|&#160;)*`/) || t.lastAMnode.innerHTML.match(/^(&nbsp;|\s|\u00a0|&#160;)*$/)) {
                          p = t.lastAMnode.parentNode;
                          p.removeChild(t.lastAMnode);
@@ -257,10 +248,13 @@
 
         /**
          * Returns information about the plugin as a name/value array.
-         * The current keys are longname, author, authorurl, infourl and version.
+         * The current keys are longname, author, authorurl, infourl and
+         * version.
          *
-         * @return {Object} Name/value array containing information about the plugin.
+         * @return {Object} Name/value array containing information
+         * about the plugin.
          */
+
         getInfo : function() {
             return {
                 longname : 'Asciimath plugin',
@@ -270,7 +264,7 @@
                 version : "1.0"
             };
         },
-        
+
         math2ascii : function(el) {
             var myAM = el.innerHTML;
             if (myAM.indexOf("`") == -1) {
@@ -286,7 +280,7 @@
                 el.innerHTML = myAM;
             }
         },
-        
+
         nodeToAM : function(outnode) {
             
             if (tinymce.isIE) {
@@ -296,18 +290,24 @@
                   newAM.appendChild(AMparseMath(str));
                   outnode.innerHTML = newAM.innerHTML;    
               } else {
-                  //doesn't work on IE, probably because this script is in the parent
-                  //windows, and the node is in the iframe.  Should it work in Moz?
-                 var myAM = "`"+outnode.innerHTML.replace(/\`/g,"")+"`"; //next 2 lines needed to make caret
-                 outnode.innerHTML = myAM;     //move between `` on Firefox insert math
+                  // doesn't work on IE, probably because this script is
+                  // in the parent
+                  // windows, and the node is in the iframe.  Should it
+                  // work in Moz?
+
+                 // next 2 lines needed to make caret
+                 var myAM = "`"+outnode.innerHTML.replace(/\`/g,"")+"`"; 
+
+                 // move between `` on Firefox insert math
+                 outnode.innerHTML = myAM;     
                  AMprocessNode(outnode);
               }
             
         }, 
-        
+
         lastAMnode : null,
         preventAMrender : false,
-        
+
         testAMclass : function(el) {
             if ((el.className == 'AM') || (el.className == 'AMedit')) {
                 return true;
