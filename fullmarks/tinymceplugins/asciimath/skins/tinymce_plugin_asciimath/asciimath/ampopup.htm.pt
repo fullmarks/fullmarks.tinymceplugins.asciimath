@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title i18n:translate="asciimath_popup_title">Add ASCIIMath Formula</title>
+	<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+	<script type="text/javascript" src="js/ASCIIMathML.js"></script>
+	<script type="text/javascript" src="js/ampopup.js"></script>
+</head>
+<body>
+	<div class="dialog-wrapper" id="content">
+		<form onsubmit="insertASCIIMath();return false;" action="#">
+            <div class="field">
+                <label i18n:translate="asciimath_enter_formula">Enter your formula:</label>
+
+                <textarea onkeyup="displayMathML()" cols="40" rows="2" id="inputText"></textarea>
+
+            </div>
+
+            <div class="field">
+                <label i18n:translate="asciimath_enter_formula">Preview:</label>
+
+                <div id="outputNode"></div>
+
+            </div>
+
+            <div class="field">
+                <input type="submit" value="Insert formula" i18n:translate="asciimath_insert_formula"/>
+            </div>
+
+        </form>
+
+
+        <h3 i18n:translate="heading_help">Help</h3>
+
+        <dl>
+            <dt>Operation symbols</dt> 
+            <dd> + - * ** // \\ xx -: @ o+ ox sum prod ^^ ^^^ vv vvv nn nnn uu uuu</dd>
+
+            <dt>Relation symbols</dt>
+            <dd> = != &lt; &lt;= &gt; &gt;= -&lt; &gt;- in !in sub sup sube supe -= ~= ~~ prop</dd>
+
+            <dt>Logical symbols</dt><dd> \and \or \not =&gt; if iff AA EE _|_ TT |-- |==</dd>
+            <dt>Miscellaneous symbols</dt> 
+            <dd> int oint del grad +- O/ oo aleph ... cdots \  quad qquad diamond square |__ __| |~ ~| CC NN QQ RR ZZ</dd>
+            <dt>Standard functions</dt> 
+            <dd> sin cos tan csc sec cot sinh cosh tanh log ln det dim lim mod gcd lcm</dd>
+            <dt>Grouping brackets</dt><dd> ( ) [ ] { } (: :) {: :} </dd> 
+
+            <dt>Arrows</dt><dd> uarr darr rarr -&gt; larr harr rArr lArr hArr </dd>
+            <dt>Accents</dt><dd> hatx barx ulx vecx dotx ddotx </dd>
+            <dt>Font commands</dt><dd> bbA bbbA ccA ttA frA sfA </dd>
+            <dt>Matrices</dt><dd> [[a,b],[c,d]] ((1,0),(0,1)) </dd>
+
+            <dt>Greek letters</dt><dd> alpha beta chi delta Delta epsi eta gamma Gamma
+            iota kappa lambda Lambda mu nu omega Omega phi Phi pi Pi psi rho sigma Sigma 
+            tau theta Theta upsilon xi Xi zeta</dd> 
+        </dl>
+
+    </div>
+
+</body>
+</html>
