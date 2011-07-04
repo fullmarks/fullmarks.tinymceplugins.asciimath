@@ -60,7 +60,7 @@
                 
             });
 
-            ed.addCommand('mceAsciimathDlg', function() {
+            ed.addCommand('mceAsciimathCharmap', function() {
                 if (typeof AMTcgiloc == 'undefined') {
                     AMTcgiloc = ""; 
                 }
@@ -77,6 +77,21 @@
                 });
                 
             });
+
+            ed.addCommand('mceAsciimathPopup', function() {
+                ed.windowManager.open({
+                    file : url + '/ampopup.htm',
+                    width : 630 + parseInt(
+                        ed.getLang('asciimathdlg.delta_width', 0)),
+                    height : 390 + parseInt(
+                        ed.getLang('asciimathdlg.delta_height', 0)),
+                    inline : 1
+                }, {
+                    plugin_url : url, // Plugin absolute URL
+                });
+                
+            });
+
 
             ed.onKeyPress.add(function(ed, ev) {
                 var key = String.fromCharCode(ev.charCode || ev.keyCode);
@@ -120,7 +135,13 @@
 
             ed.addButton('asciimathcharmap', {
                 title : 'asciimathcharmap.desc',
-                cmd : 'mceAsciimathDlg',
+                cmd : 'mceAsciimathCharmap',
+                image : url + '/img/ed_mathformula.gif'
+            });
+
+            ed.addButton('asciimathpopup', {
+                title : 'asciimathpopup.desc',
+                cmd : 'mceAsciimathPopup',
                 image : url + '/img/ed_mathformula.gif'
             });
 
