@@ -140,9 +140,9 @@
             });
 
             ed.addButton('asciimathpopup', {
-                title : 'asciimathpopup.desc',
+                title : 'asciimath.desc',
                 cmd : 'mceAsciimathPopup',
-                image : url + '/img/ed_mathformula.gif'
+                image : url + '/img/ed_mathformula2.gif'
             });
 
             ed.onPreInit.add(function(ed) {
