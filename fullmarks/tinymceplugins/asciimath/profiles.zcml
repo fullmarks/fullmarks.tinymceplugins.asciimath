@@ -5,9 +5,9 @@
 
     <genericsetup:registerProfile
         name="default"
-        title="ASCIIMATH editor plugin for TinyMCE"
+        title="TinyMCE ASCIIMATH plugin"
         directory="profiles/default"
-        description='ASCIIMATH editor plugin for TinyMCE'
+        description='TinyMCE ASCIIMATH plugin'
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
