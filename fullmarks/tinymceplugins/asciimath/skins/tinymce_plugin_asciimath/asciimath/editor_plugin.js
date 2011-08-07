@@ -27,36 +27,11 @@
         init : function(ed, url) {
             var t = this;
 
-            // Register the command so that it can be invoked by using
-            // tinyMCE.activeEditor.execCommand('mceAsciimath');
-
             ed.addCommand('mceAsciimath', function(val) {
 
-                if (t.lastAMnode==null) {
-                    existing = ed.selection.getContent();
-                    // existing does not contain an AM node, so turn it
-                    // into one
-                    if (existing.indexOf('class=AM')==-1) {
-                           //strip out all existing html tags.
-                           existing = existing.replace(/<([^>]*)>/g,"");
-                           existing = existing.replace(/&(.*?);/g,"$1");
-                           if (val) {
-                               existing = val;
-                           }
-                           entity = '<span class=AMedit>`'+existing+'<span id="removeme"></span>`</span> ';
-
-                           if (tinymce.isIE) ed.focus();
-
-                           ed.selection.setContent(entity);
-                           ed.selection.select(ed.dom.get('removeme'));
-                           ed.dom.remove('removeme');
-                           ed.selection.collapse(true);
-                           ed.nodeChanged();
-                     }
-
-                } else if (val) {
-                    ed.selection.setContent(val);
-                }
+                var el = ed.dom.create('span', {'class' : 'AM'}, val);
+                t.ascii2mathml(el);
+                ed.selection.setNode(el);
                 
             });
 
@@ -79,6 +54,9 @@
             });
 
             ed.addCommand('mceAsciimathPopup', function() {
+				var el = ed.selection.getNode();
+				var spanAM = ed.dom.getParent(el, 'span.AM');
+
                 ed.windowManager.open({
                     file : url + '/ampopup.htm',
                     width : 630 + parseInt(
@@ -92,57 +70,39 @@
                 
             });
 
-
-            ed.onKeyPress.add(function(ed, ev) {
-                var key = String.fromCharCode(ev.charCode || ev.keyCode);
-                if (key=='`') {
-                    if (t.lastAMnode == null) {
-                        existing = ed.selection.getContent();
-                        // existing does not contain an AM node, so turn
-                        // it into one
-                        if (existing.indexOf('class=AM')==-1) { 
-                               // strip out all existing html tags.
-                               existing = existing.replace(/<([^>]*)>/g,"");
-                               entity = '<span class=AMedit>`'+existing+'<span id="removeme"></span>`</span> ';
-                            
-                               if (tinymce.isIE) ed.focus();
-                           
-                               ed.selection.setContent(entity);
-                           
-                               ed.selection.select(ed.dom.get('removeme'));
-                               ed.dom.remove('removeme');
-                               
-                               ed.nodeChanged();
-                               
-                         }
+            // Add a node change handler, selects the button in the UI
+            // when mathml is selected
+			ed.onNodeChange.add(function(ed, cm, n) {
+                selected = ed.dom.select('math.mceItemVisualAid');
+                for (var i=0; i < selected.length; i++) {
+                    math = selected[i];
+                    math.removeAttribute('class');
+                };
+				var AMspan = ed.dom.getParent(n, 'span');
+				cm.setActive('asciimath', AMspan != null);
+                if (AMspan && AMspan.getElementsByClassName('mceItemVisualAid')) {
+                    math = AMspan.childNodes[0];
+                    if (math != null) {
+                        // not sure why ed.dom.addClass does not work
+                        // ed.dom.addClass(math, 'mceItemVisualAid');
+                        math.setAttribute('class', 'mceItemVisualAid');
                     }
-                    if (ev.stopPropagation) {
-                        ev.stopPropagation();
-                        ev.preventDefault();
-                       } else {
-                        ev.cancelBubble = true;
-                        ev.returnValue = false;
-                       }
-                }
-            });
+                };
+			});
+
 
             // Register asciimath button
             ed.addButton('asciimath', {
                 title : 'asciimath.desc',
-                cmd : 'mceAsciimath',
+                cmd : 'mceAsciimathPopup',
                 image : url + '/img/ed_mathformula2.gif'
             });
+
 
             ed.addButton('asciimathcharmap', {
                 title : 'asciimathcharmap.desc',
                 cmd : 'mceAsciimathCharmap',
                 image : url + '/img/ed_mathformula.gif'
-            });
-
-            ed.addButton('asciimathpopup', {
-                title : 'asciimath.desc',
-                cmd : 'mceAsciimathPopup',
-                image : url + '/img/ed_mathformula2.gif'
             });
 
             ed.onPreInit.add(function(ed) {
@@ -182,7 +142,7 @@
             ed.onGetContent.add(function(ed,cmd) {
                 AMtags = ed.dom.select('span.AMedit');
                 for (var i=0; i<AMtags.length; i++) {
-                    t.nodeToAM(AMtags[i]);
+                    t.ascii2mathml(AMtags[i]);
                     AMtags[i].className = "AM";
                 }
             });
@@ -191,47 +151,9 @@
                 if (cmd == 'mceRepaint') {
                     AMtags = ed.dom.select('span.AM');
                     for (var i=0; i<AMtags.length; i++) {
-                        t.nodeToAM(AMtags[i]);
+                        t.ascii2mathml(AMtags[i]);
                     }
                 }
-            });
-
-            ed.onNodeChange.add(function(ed, cm, e) {
-                var doprocessnode = true;
-                if (t.testAMclass(e)) {
-                    p = e;
-                } else {
-                    p = ed.dom.getParent(e,t.testAMclass);
-                }
-                cm.setDisabled('charmap', p!=null);
-                cm.setDisabled('sub', p!=null);
-                cm.setDisabled('sup', p!=null);
-                if (p != null) {
-                    if (t.lastAMnode == p) {
-                        doprocessnode = false;
-                    } else {
-                        t.math2ascii(p); 
-                        p.className = 'AMedit';
-                        if (t.lastAMnode != null) { 
-                            t.nodeToAM(t.lastAMnode); 
-                            t.lastAMnode.className = 'AM'
-                        }
-                        t.lastAMnode = p;
-                        doprocessnode = false;
-                    }
-                }
-
-                // if not in AM node, process last
-                if (doprocessnode && (t.lastAMnode != null)) { 
-                     if (t.lastAMnode.innerHTML.match(/`(&nbsp;|\s|\u00a0|&#160;)*`/) || t.lastAMnode.innerHTML.match(/^(&nbsp;|\s|\u00a0|&#160;)*$/)) {
-                         p = t.lastAMnode.parentNode;
-                         p.removeChild(t.lastAMnode);
-                     } else {
-                         t.nodeToAM(t.lastAMnode);  
-                         t.lastAMnode.className = 'AM'; 
-                     }
-                     t.lastAMnode = null;
-                   }
             });
 
             ed.onDeactivate.add(function(ed) {
@@ -240,28 +162,10 @@
                          p = t.lastAMnode.parentNode;
                          p.removeChild(t.lastAMnode);
                      } else {
-                         t.nodeToAM(t.lastAMnode);  
+                         t.ascii2mathml(t.lastAMnode);  
                          t.lastAMnode.className = 'AM'; 
                      }
                      t.lastAMnode = null;
-                }
-            });
-
-            ed.onClick.add(function(ed, e) {
-                if (t.lastAMnode != null && e.target != t.lastAMnode) {
-                    if (t.lastAMnode.innerHTML.match(/`(&nbsp;|\s)*`/)|| t.lastAMnode.innerHTML.match(/^(&nbsp;|\s|\u00a0|&#160;)*$/)) {
-                        p = t.lastAMnode.parentNode;
-                        p.removeChild(t.lastAMnode);
-                    } else {
-                        t.nodeToAM(t.lastAMnode);  
-                        t.lastAMnode.className = 'AM'; 
-                    }
-                    t.lastAMnode = null;
-                    e.target.innerHTML = e.target.innerHTML + '<span id="removeme"></span>'
-                    ed.selection.select(ed.dom.get('removeme'));
-                    ed.dom.remove('removeme');
-                    ed.selection.collapse(true);
-                    ed.nodeChanged();
                 }
             });
 
@@ -302,7 +206,7 @@
             }
         },
 
-        nodeToAM : function(outnode) {
+        ascii2mathml : function(outnode) {
             
             if (tinymce.isIE) {
                   var str = outnode.innerHTML.replace(/\`/g,"");
