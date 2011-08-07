@@ -56,6 +56,13 @@
             ed.addCommand('mceAsciimathPopup', function() {
 				var el = ed.selection.getNode();
 				var spanAM = ed.dom.getParent(el, 'span.AM');
+                var asciimath = "";
+
+                if (spanAM) {
+                    mathml = spanAM.cloneNode(true);
+                    t.math2ascii(mathml); 
+                    asciimath = mathml.innerHTML.slice(1,-1);
+                }
 
                 ed.windowManager.open({
                     file : url + '/ampopup.htm',
@@ -66,6 +73,7 @@
                     inline : 1
                 }, {
                     plugin_url : url, // Plugin absolute URL
+                    asciimath: asciimath,
                 });
                 
             });

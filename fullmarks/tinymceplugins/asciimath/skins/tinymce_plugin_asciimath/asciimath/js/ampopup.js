@@ -21,3 +21,11 @@ function insertASCIIMath() {
     tinyMCEPopup.editor.execCommand('mceAsciimath', val);
     tinyMCEPopup.close();
 };
+
+
+function initPopup() {
+    document.getElementById("inputText").value = tinyMCEPopup.getWindowArg('asciimath');
+    displayMathML();
+}
+
+tinyMCEPopup.onInit.add(initPopup);
