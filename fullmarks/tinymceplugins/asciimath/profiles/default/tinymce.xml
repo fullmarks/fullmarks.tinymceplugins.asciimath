@@ -9,7 +9,6 @@
         <customtoolbarbuttons purge="False">
             <element value="asciimath"/>
             <element value="asciimathcharmap"/>
-            <element value="asciimathpopup"/>
         </customtoolbarbuttons>
     </toolbar>
 </object>
