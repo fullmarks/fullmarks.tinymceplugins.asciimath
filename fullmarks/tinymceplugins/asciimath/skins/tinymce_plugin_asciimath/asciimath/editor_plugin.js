@@ -86,18 +86,27 @@
                     math = selected[i];
                     math.removeAttribute('class');
                 };
-				var AMspan = ed.dom.getParent(n, 'span');
+				var AMspan = ed.dom.getParent(n, 'span.AM');
 				cm.setActive('asciimath', AMspan != null);
-                if (AMspan && AMspan.getElementsByClassName('mceItemVisualAid')) {
-                    math = AMspan.childNodes[0];
-                    if (math != null) {
-                        // not sure why ed.dom.addClass does not work
-                        // ed.dom.addClass(math, 'mceItemVisualAid');
-                        math.setAttribute('class', 'mceItemVisualAid');
-                    }
-                };
-			});
+                if (AMspan) {
+                    math = AMspan.getElementsByTagName('math')[0];
+                    // force selection of the math element since
+                    // selection of child elements causes an exception when
+                    // TinyMCE tries access the style attribute on those
+                    // MathML elements
+                    ed.selection.select(math);
+                    ed.selection.collapse(true);
+                    // highlight the math element
+                    if (AMspan.getElementsByClassName('mceItemVisualAid')) {
+                        if (math != null) {
+                            // not sure why ed.dom.addClass does not work
+                            // ed.dom.addClass(math, 'mceItemVisualAid');
+                            math.setAttribute('class', 'mceItemVisualAid');
+                        }
+                    };
 
+                }
+			});
 
             // Register asciimath button
             ed.addButton('asciimath', {
