@@ -3,6 +3,8 @@
 
 tinyMCEPopup.requireLangPack();
 
+translateOnLoad = false;
+
 function displayMathML() {
     if (AMnames.length==0) initSymbols();
     var str = "amath " + document.getElementById("inputText").value;
@@ -28,6 +30,7 @@ function initPopup() {
     inputText.focus();
     inputText.value = tinyMCEPopup.getWindowArg('asciimath');
     displayMathML();
+    translate("AM");
 }
 
 tinyMCEPopup.onInit.add(initPopup);
