@@ -29,9 +29,15 @@
 
             ed.addCommand('mceAsciimath', function(val) {
 
-                var el = ed.dom.create('span', {'class' : 'AM'}, val);
-                t.ascii2mathml(el);
-                ed.selection.setNode(el);
+                selected = ed.selection.getNode();
+				var spanAM = ed.dom.getParent(selected, 'span.AM');
+                if (spanAM) {
+                    spanAM.innerHTML = val;
+                } else {
+                    spanAM = ed.dom.create('span', {'class' : 'AM'}, val);
+                    ed.selection.setNode(spanAM);
+                }
+                t.ascii2mathml(spanAM);
                 
             });
 
