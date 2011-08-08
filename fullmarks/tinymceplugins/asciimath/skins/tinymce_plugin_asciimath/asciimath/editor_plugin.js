@@ -272,6 +272,7 @@
         },
 
         math2ascii : function(el) {
+            // ASCIIMath is stored in title attribute
             var myAM = el.innerHTML;
             if (myAM.indexOf("`") == -1) {
                 myAM = myAM.replace(/.+(alt|title)=\"(.*?)\".+/g,"$2");
