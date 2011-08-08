@@ -33,11 +33,12 @@
 				var spanAM = ed.dom.getParent(selected, 'span.AM');
                 if (spanAM) {
                     spanAM.innerHTML = val;
+                    t.ascii2mathml(spanAM);
                 } else {
                     spanAM = ed.dom.create('span', {'class' : 'AM'}, val);
+                    t.ascii2mathml(spanAM);
                     ed.selection.setNode(spanAM);
                 }
-                t.ascii2mathml(spanAM);
                 
             });
 
@@ -113,6 +114,63 @@
 
                 }
 			});
+
+            ed.onKeyPress.add(function(ed, e) {
+                // delete MathML when delete or backspace key is pressed
+                if (e.keyCode == 46 || e.keyCode == 8) {
+                    node = ed.selection.getNode();
+                    var spanAM = ed.dom.getParent(node, 'span.AM');
+                    if (spanAM) {
+                        spanAM.parentNode.removeChild(spanAM);
+                    }
+                }
+
+                // place the caret after the MathML node when pressing
+                // enter, down or right arrow
+                if (e.keyCode == 13 || e.keyCode == 0 ||
+                    e.keyCode == 37 || e.keyCode == 38 ||
+                    e.keyCode == 39 || e.keyCode == 40) {
+                    var rng, spanAM, dom = ed.dom;
+
+                    rng = ed.selection.getRng();
+                    spanAM = dom.getParent(rng.startContainer, 'span.AM');
+
+                    if (spanAM) {
+                        rng = dom.createRng();
+
+                        if (e.keyCode == 37 || e.keyCode == 38) {
+                            rng.setStartBefore(spanAM);
+                            rng.setEndBefore(spanAM);
+                        } else {
+                            rng.setStartAfter(spanAM);
+                            rng.setEndAfter(spanAM);
+                        }
+                        ed.selection.setRng(rng);
+                    }
+                }
+            });
+
+
+            // Fix caret position
+            ed.onInit.add(function(ed) {
+                if (!tinymce.isIE) {
+					function fixCaretPos() {
+						var last = ed.getBody().lastChild;
+						if (last && last.nodeName == 'P')
+                            if (last.childNodes.length == 0 || 
+                                    last.lastChild.nodeName == 'SPAN' &&
+                                    last.lastChild.className == 'AM') {
+                                br = ed.dom.create('br', {'mce_bogus' : '1'});
+                                last.appendChild(br)
+                            }
+					};
+                    fixCaretPos();
+                };
+                ed.onKeyUp.add(fixCaretPos);
+                ed.onSetContent.add(fixCaretPos);
+                ed.onVisualAid.add(fixCaretPos);
+            });
+
 
             // Register asciimath button
             ed.addButton('asciimath', {
