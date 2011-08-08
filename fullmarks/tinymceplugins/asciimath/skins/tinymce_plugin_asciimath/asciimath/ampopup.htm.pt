@@ -47,8 +47,8 @@
                     <td><span class="AM">`x^(m+n)`</span></td>
                 </tr>
                 <tr>
-                    <td>sqrt(x)</td>
-                    <td><span class="AM">`sqrt(x)`</span></td>
+                    <td>dy/dx</td>
+                    <td><span class="AM">`dy/dx`</span></td>
                 </tr>
             </table>
 
@@ -58,12 +58,12 @@
                     <th>MathML</th>
                 </tr>
                 <tr>
-                    <td>root(n)(x)</td>
-                    <td><span class="AM">`root(n)(x)`</span></td>
+                    <td>sqrt(x)</td>
+                    <td><span class="AM">`sqrt(x)`</span></td>
                 </tr>
                 <tr>
-                    <td>dy/dx</td>
-                    <td><span class="AM">`dy/dx`</span></td>
+                    <td>root(n)(x)</td>
+                    <td><span class="AM">`root(n)(x)`</span></td>
                 </tr>
                 <tr>
                     <td>sum_(n=1)^oo</td>
@@ -77,8 +77,8 @@
                     <th>MathML</th>
                 </tr>
                 <tr>
-                    <td>int_a^bf(x)dx</td>
-                    <td><span class="AM">`int_a^bf(x)dx`</span></td>
+                    <td>int_a^b f(x)dx</td>
+                    <td><span class="AM">`int_a^b f(x)dx`</span></td>
                 </tr>
                 <tr>
                     <td>[[a,b],[c,d]]</td>
