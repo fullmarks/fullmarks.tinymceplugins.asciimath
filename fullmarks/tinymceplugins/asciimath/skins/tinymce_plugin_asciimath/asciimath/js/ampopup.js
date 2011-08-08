@@ -24,7 +24,9 @@ function insertASCIIMath() {
 
 
 function initPopup() {
-    document.getElementById("inputText").value = tinyMCEPopup.getWindowArg('asciimath');
+    var inputText = document.getElementById("inputText");
+    inputText.focus();
+    inputText.value = tinyMCEPopup.getWindowArg('asciimath');
     displayMathML();
 }
 
