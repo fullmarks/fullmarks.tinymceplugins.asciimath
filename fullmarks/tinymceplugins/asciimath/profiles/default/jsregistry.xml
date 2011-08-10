@@ -5,6 +5,24 @@
              cookable="True"
              enabled="True"
              expression=""
+             id="asciimath/js/configuremath.js"
+             inline="True"/>
+ <javascript cacheable="True"
+             compression="none"
+             cookable="True"
+             enabled="True"
+             expression=""
              id="asciimath/js/ASCIIMathML.js"
+             inline="False"/>
+
+ <!-- disable loading MathJax normally since we need to convert
+      ASCIIMath to MathML before MathJax loads. see skins/tinymce_plugin_asciimath/asciimath/js/configuremath.js
+    -->
+ <javascript cacheable="True"
+             compression="none"
+             cookable="True"
+             enabled="False"
+             expression=""
+             id="++resource++fullmarks.mathjax/mathjax/MathJax.js?config=default.js"
              inline="False"/>
 </object>
