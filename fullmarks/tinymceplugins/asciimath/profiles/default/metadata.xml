@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
 <metadata>
     <version>1.0</version>
+    <dependencies>
+        <dependency>profile-fullmarks.mathjax:default</dependency>
+    </dependencies>
 </metadata>
