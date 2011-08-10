@@ -25,6 +25,7 @@ setup(name='fullmarks.tinymceplugins.asciimath',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'fullmarks.mathjax',
       ],
       entry_points="""
       # -*- Entry points: -*-
