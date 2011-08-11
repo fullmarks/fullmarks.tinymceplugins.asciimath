@@ -16,3 +16,20 @@ Instead it uses MathJax for cross-browser rendering of MathML.
 Additionally it uses the latest version (ver 2.0) of the ASCIIMATH
 javascript library by Peter Jipsen available here:
 http://mathcs.chapman.edu/~jipsen/mathml/asciimath.html
+
+This plugin was developed as part of the FullMarks project funded by the
+Shuttleworth Foundation, an open educational repository of model
+questions and answers. See http://www.fullmarks.org.za.
+
+Installation
+============
+
+1. Add as an egg to your buildout and rerun buildout:
+
+    [buildout]
+    eggs =
+        fullmarks.tinymceplugins.asciimath
+
+2. Navigate to Add-ons in the Site Setup area of your Plone site.
+
+3. Activate the TinyMCE ASCIIMATH plugin
