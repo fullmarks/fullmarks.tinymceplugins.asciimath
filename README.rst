@@ -22,6 +22,10 @@ Shuttleworth Foundation, an open educational repository of model
 questions and answers. See http://www.fullmarks.org.za and
 http://github.com/fullmarks for more information.
 
+NOTE: This plugin depends on fullmarks.mathjax that includes the full
+MathJax library containing all the fonts necessary to render math
+properly in your browser. The total size of this package is 17MB.
+
 Installation
 ============
 
