@@ -25,7 +25,7 @@ http://github.com/fullmarks for more information.
 Installation
 ============
 
-1. Add as an egg to your buildout and rerun buildout:
+1. Add as an egg to your buildout and rerun buildout::
 
     [buildout]
     eggs =
