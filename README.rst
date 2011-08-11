@@ -19,7 +19,8 @@ http://mathcs.chapman.edu/~jipsen/mathml/asciimath.html
 
 This plugin was developed as part of the FullMarks project funded by the
 Shuttleworth Foundation, an open educational repository of model
-questions and answers. See http://www.fullmarks.org.za.
+questions and answers. See http://www.fullmarks.org.za and
+http://github.com/fullmarks for more information.
 
 Installation
 ============
