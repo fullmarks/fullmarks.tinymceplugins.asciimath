@@ -1,6 +1,6 @@
 translateOnLoad = false;
 
-$(document).ready(function() {
+jq(document).ready(function() {
     translate();
 
     var script = document.createElement("script");
