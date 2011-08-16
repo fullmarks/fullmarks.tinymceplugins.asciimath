@@ -1,1 +1,2 @@
+div.AM { display: inline }
 span.AMedit { border: 1px solid red }

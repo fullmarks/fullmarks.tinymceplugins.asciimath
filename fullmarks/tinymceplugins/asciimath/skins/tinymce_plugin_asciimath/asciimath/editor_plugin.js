@@ -30,22 +30,26 @@
             ed.addCommand('mceAsciimath', function(val) {
 
                 selected = ed.selection.getNode();
-				var spanAM = ed.dom.getParent(selected, 'span.AM');
-                if (spanAM) {
-                    spanAM.innerHTML = val;
-                    t.ascii2mathml(spanAM);
+				var divAM = ed.dom.getParent(selected, 'div.AM');
+                var spanAM = ed.dom.create('span', {'class' : 'AM'}, val);
+                t.ascii2mathml(spanAM);
+                var mathml = spanAM.innerHTML;
+                mathml = mathml.replace(/>/g,"&gt;");
+                mathml = mathml.replace(/</g,"&lt;");
+
+                console.log(selected);
+
+                if (divAM) {
+                    divAM.innerHTML = '<span class="AM">' + spanAM.innerHTML + '</span><span class="MathML"><!CDATA[[' + mathml + ']></span>';
                 } else {
-                    spanAM = ed.dom.create('span', {'class' : 'AM'}, val);
-                    t.ascii2mathml(spanAM);
-                    ed.selection.setNode(spanAM);
+                    divAM = ed.dom.create('div', {'class': 'divAM'});
+                    divAM.innerHTML = '<span class="AM">' + spanAM.innerHTML + '</span><span class="MathML"><!CDATA[[' + mathml + ']></span>';
+                    ed.selection.setNode(divAM);
                 }
                 
             });
 
             ed.addCommand('mceAsciimathCharmap', function() {
-                if (typeof AMTcgiloc == 'undefined') {
-                    AMTcgiloc = ""; 
-                }
                 ed.windowManager.open({
                     file : url + '/amcharmap',
                     width : 630 + parseInt(
@@ -119,9 +123,9 @@
                 // delete MathML when delete or backspace key is pressed
                 if (e.keyCode == 46 || e.keyCode == 8) {
                     node = ed.selection.getNode();
-                    var spanAM = ed.dom.getParent(node, 'span.AM');
-                    if (spanAM) {
-                        spanAM.parentNode.removeChild(spanAM);
+                    var divAM = ed.dom.getParent(node, 'div.AM');
+                    if (divAM) {
+                        divAM.parentNode.removeChild(divAM);
                     }
                 }
 
@@ -130,20 +134,20 @@
                 if (e.keyCode == 13 || e.keyCode == 0 ||
                     e.keyCode == 37 || e.keyCode == 38 ||
                     e.keyCode == 39 || e.keyCode == 40) {
-                    var rng, spanAM, dom = ed.dom;
+                    var rng, divAM, dom = ed.dom;
 
                     rng = ed.selection.getRng();
-                    spanAM = dom.getParent(rng.startContainer, 'span.AM');
+                    divAM = dom.getParent(rng.startContainer, 'div.AM');
 
-                    if (spanAM) {
+                    if (divAM) {
                         rng = dom.createRng();
 
                         if (e.keyCode == 37 || e.keyCode == 38) {
-                            rng.setStartBefore(spanAM);
-                            rng.setEndBefore(spanAM);
+                            rng.setStartBefore(divAM);
+                            rng.setEndBefore(divAM);
                         } else {
-                            rng.setStartAfter(spanAM);
-                            rng.setEndAfter(spanAM);
+                            rng.setStartAfter(divAM);
+                            rng.setEndAfter(divAM);
                         }
                         ed.selection.setRng(rng);
                     }

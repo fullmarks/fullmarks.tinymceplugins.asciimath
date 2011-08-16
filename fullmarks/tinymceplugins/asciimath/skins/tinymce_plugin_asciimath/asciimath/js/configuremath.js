@@ -1,7 +1,8 @@
 translateOnLoad = false;
 
 jq(document).ready(function() {
-    translate();
+    spanclassAM = true;
+    translate(spanclassAM);
 
     var script = document.createElement("script");
     script.src = "++resource++fullmarks.mathjax/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"
