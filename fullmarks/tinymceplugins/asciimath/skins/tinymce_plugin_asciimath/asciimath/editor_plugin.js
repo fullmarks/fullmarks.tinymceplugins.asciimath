@@ -1,13 +1,10 @@
 /**
  * ASCIIMath Plugin for TinyMCE editor
- *   port of ASCIIMath plugin for HTMLArea written by 
- *   David Lippman & Peter Jipsen
+ *   based on ASCIIMath plugin written by David Lippman 
  *
- * @author David Lippman
- * @copyright Copyright © 2008 David Lippman.
+ * @author Roché Compaan
+ * @copyright Copyright © 2011 Roché Compaan
  *
- * Plugin format based on code that is:
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
 (function() {
@@ -158,13 +155,10 @@
                 if (!tinymce.isIE) {
 					function fixCaretPos() {
 						var last = ed.getBody().lastChild;
-						if (last && last.nodeName == 'P')
-                            if (last.childNodes.length == 0 || 
-                                    last.lastChild.nodeName == 'SPAN' &&
-                                    last.lastChild.className == 'AM') {
-                                br = ed.dom.create('br', {'mce_bogus' : '1'});
-                                last.appendChild(br)
-                            }
+						if (last && last.nodeName == 'DIV' && last.className =='AM') {
+                            br = ed.dom.create('br', {'mce_bogus' : '1'});
+                            ed.getBody().appendChild(br);
+                        }
 					};
                     fixCaretPos();
                 };
@@ -266,8 +260,8 @@
         getInfo : function() {
             return {
                 longname : 'Asciimath plugin',
-                author : 'David Lippman',
-                authorurl : 'http://www.pierce.ctc.edu/dlippman',
+                author : 'Roché Compaan',
+                authorurl : 'http://github.com/rochecompaan',
                 infourl : '',
                 version : "1.0"
             };
