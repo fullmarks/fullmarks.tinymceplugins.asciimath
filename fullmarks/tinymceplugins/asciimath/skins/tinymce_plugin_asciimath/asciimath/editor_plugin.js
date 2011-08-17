@@ -34,11 +34,23 @@
                 mathml = mathml.replace(/>/g,"&gt;");
                 mathml = mathml.replace(/</g,"&lt;");
 
+                // using DOMUtils messes up CDATA section so use
+                // createCDATASection instead
+                var cdata = '<![CDATA[' + mathml + ']]>';
+                var spanMathML = ed.dom.create('span', {'class': 'MathML'});
+                ed.dom.setHTML(spanMathML, cdata);
+
                 if (divAM) {
-                    divAM.innerHTML = '<span class="AM">' + spanAM.innerHTML + '</span><span class="MathML"><!CDATA[[' + mathml + ']></span>';
+                    var newdivAM = ed.dom.create('div', {'class': 'AM'});
+                    ed.dom.add(divAM, spanAM);
+                    ed.dom.add(divAM, spanMathML);
+                    ed.dom.replace(divAM, newdivAM);
+                    ed.selection.select(divAM);
+                    ed.selection.collapse(true);
                 } else {
                     divAM = ed.dom.create('div', {'class': 'AM'});
-                    divAM.innerHTML = '<span class="AM">' + spanAM.innerHTML + '</span><span class="MathML"><!CDATA[[' + mathml + ']></span>';
+                    ed.dom.add(divAM, spanAM);
+                    ed.dom.add(divAM, spanMathML);
                     ed.selection.setNode(divAM);
                 }
                 
