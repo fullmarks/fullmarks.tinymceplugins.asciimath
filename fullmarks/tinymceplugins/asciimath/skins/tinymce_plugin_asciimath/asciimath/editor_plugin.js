@@ -37,12 +37,10 @@
                 mathml = mathml.replace(/>/g,"&gt;");
                 mathml = mathml.replace(/</g,"&lt;");
 
-                console.log(selected);
-
                 if (divAM) {
                     divAM.innerHTML = '<span class="AM">' + spanAM.innerHTML + '</span><span class="MathML"><!CDATA[[' + mathml + ']></span>';
                 } else {
-                    divAM = ed.dom.create('div', {'class': 'divAM'});
+                    divAM = ed.dom.create('div', {'class': 'AM'});
                     divAM.innerHTML = '<span class="AM">' + spanAM.innerHTML + '</span><span class="MathML"><!CDATA[[' + mathml + ']></span>';
                     ed.selection.setNode(divAM);
                 }
