@@ -13,7 +13,7 @@
             <div class="field">
                 <label i18n:translate="asciimath_enter_formula">Enter your formula:</label>
 
-                <textarea onkeyup="displayMathML()" cols="40" rows="2" id="inputText"></textarea>
+                <textarea onkeyup="displayMathML()" onblur="displayMathML()" cols="40" rows="2" id="inputText"></textarea>
 
             </div>
 
