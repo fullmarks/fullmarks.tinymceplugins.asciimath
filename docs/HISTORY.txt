@@ -4,7 +4,9 @@ Changelog
 1.2
 ---
 
-- Embed MatHML source in hidden CDATA section alongside ASCIIMATH
+- Embed MatHML source in hidden CDATA section alongside ASCIIMATH.
+  NOTE: Plone 3's safe_html transform swallows CDATA, Plone 4 works
+  fine.
 
 1.1
 ---
