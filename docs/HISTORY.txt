@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2
+---
+
+- Embed MatHML source in hidden CDATA section alongside ASCIIMATH
+
 1.1
 ---
 
