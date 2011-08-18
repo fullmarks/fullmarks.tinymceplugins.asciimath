@@ -1,6 +1,6 @@
 /**
  * ASCIIMath Plugin for TinyMCE editor
- *   based on ASCIIMath plugin written by David Lippman 
+ *   based on TinyMCE ASCIIMath plugin written by David Lippman 
  *
  * @author Roché Compaan
  * @copyright Copyright © 2011 Roché Compaan
@@ -8,26 +8,17 @@
  */
 
 (function() {
-    // Load plugin specific language pack
     tinymce.PluginManager.requireLangPack('asciimath');
 
     tinymce.create('tinymce.plugins.AsciimathPlugin', {
-        /**
-         * Initializes the plugin, this will be executed after the
-         * plugin has been created.This call is done before the editor
-         * instance has finished it's initialization so use the onInit
-         * event of the editor instance to intercept that event.
-         * @param {tinymce.Editor} ed Editor instance that the plugin is
-         * initialized in.
-         * @param {string} url Absolute URL to where the plugin is located.
-         */
         init : function(ed, url) {
             var t = this;
 
             ed.addCommand('mceAsciimath', function(val) {
 
                 selected = ed.selection.getNode();
-				var divAM = ed.dom.getParent(selected, 'div.AM');
+				var AMcontainer = ed.dom.getParent(selected,
+                    'span.AMcontainer');
                 var spanAM = ed.dom.create('span', {'class' : 'AM'}, val);
                 t.ascii2mathml(spanAM);
                 var mathml = spanAM.innerHTML;
@@ -38,16 +29,18 @@
                 var spanMathML = ed.dom.create(
                     'span', {'class': 'MathML'}, cdata);
 
-                if (divAM) {
-                    var tmpdivAM = ed.dom.create('div', {'class': 'AM'});
-                    ed.dom.add(tmpdivAM, spanAM);
-                    ed.dom.add(tmpdivAM, spanMathML);
-                    divAM.innerHTML = tmpdivAM.innerHTML;
+                if (AMcontainer) {
+                    var tmpAMcontainer = ed.dom.create('span',
+                        {'class': 'AMcontainer'});
+                    ed.dom.add(tmpAMcontainer, spanAM);
+                    ed.dom.add(tmpAMcontainer, spanMathML);
+                    AMcontainer.innerHTML = tmpAMcontainer.innerHTML;
                 } else {
-                    divAM = ed.dom.create('div', {'class': 'AM'});
-                    ed.dom.add(divAM, spanAM);
-                    ed.dom.add(divAM, spanMathML);
-                    ed.selection.setNode(divAM);
+                    AMcontainer = ed.dom.create('span',
+                        {'class': 'AMcontainer'});
+                    ed.dom.add(AMcontainer, spanAM);
+                    ed.dom.add(AMcontainer, spanMathML);
+                    ed.selection.setNode(AMcontainer);
                 }
                 
             });
@@ -62,7 +55,6 @@
                     inline : 1
                 }, {
                     plugin_url : url, // Plugin absolute URL
-                    AMTcgiloc : AMTcgiloc
                 });
                 
             });
@@ -126,31 +118,31 @@
                 // delete MathML when delete or backspace key is pressed
                 if (e.keyCode == 46 || e.keyCode == 8) {
                     node = ed.selection.getNode();
-                    var divAM = ed.dom.getParent(node, 'div.AM');
-                    if (divAM) {
-                        divAM.parentNode.removeChild(divAM);
+                    var AMcontainer = ed.dom.getParent(node, 'span.AMcontainer');
+                    if (AMcontainer) {
+                        AMcontainer.parentNode.removeChild(AMcontainer);
                     }
                 }
 
                 // place the caret after the MathML node when pressing
-                // enter, down or right arrow
+                // enter, spacebar, down or right arrow
                 if (e.keyCode == 13 || e.keyCode == 0 ||
                     e.keyCode == 37 || e.keyCode == 38 ||
                     e.keyCode == 39 || e.keyCode == 40) {
-                    var rng, divAM, dom = ed.dom;
+                    var rng, AMcontainer, dom = ed.dom;
 
                     rng = ed.selection.getRng();
-                    divAM = dom.getParent(rng.startContainer, 'div.AM');
+                    AMcontainer = dom.getParent(rng.startContainer, 'span.AMcontainer');
 
-                    if (divAM) {
+                    if (AMcontainer) {
                         rng = dom.createRng();
 
                         if (e.keyCode == 37 || e.keyCode == 38) {
-                            rng.setStartBefore(divAM);
-                            rng.setEndBefore(divAM);
+                            rng.setStartBefore(AMcontainer);
+                            rng.setEndBefore(AMcontainer);
                         } else {
-                            rng.setStartAfter(divAM);
-                            rng.setEndAfter(divAM);
+                            rng.setStartAfter(AMcontainer);
+                            rng.setEndAfter(AMcontainer);
                         }
                         ed.selection.setRng(rng);
                     }
@@ -163,7 +155,7 @@
                 if (!tinymce.isIE) {
 					function fixCaretPos() {
 						var last = ed.getBody().lastChild;
-						if (last && last.nodeName == 'DIV' && last.className =='AM') {
+						if (last && last.nodeName == 'SPAN' && last.className =='AMcontainer') {
                             br = ed.dom.create('br', {'mce_bogus' : '1'});
                             ed.getBody().appendChild(br);
                         }
@@ -241,29 +233,7 @@
                 }
             });
 
-            ed.onDeactivate.add(function(ed) {
-                if (t.lastAMnode != null) {
-                     if (t.lastAMnode.innerHTML.match(/`(&nbsp;|\s)*`/)|| t.lastAMnode.innerHTML.match(/^(&nbsp;|\s|\u00a0|&#160;)*$/)) {
-                         p = t.lastAMnode.parentNode;
-                         p.removeChild(t.lastAMnode);
-                     } else {
-                         t.ascii2mathml(t.lastAMnode);  
-                         t.lastAMnode.className = 'AM'; 
-                     }
-                     t.lastAMnode = null;
-                }
-            });
-
         },
-
-        /**
-         * Returns information about the plugin as a name/value array.
-         * The current keys are longname, author, authorurl, infourl and
-         * version.
-         *
-         * @return {Object} Name/value array containing information
-         * about the plugin.
-         */
 
         getInfo : function() {
             return {
@@ -315,9 +285,6 @@
               }
             
         }, 
-
-        lastAMnode : null,
-        preventAMrender : false,
 
         testAMclass : function(el) {
             if ((el.className == 'AM') || (el.className == 'AMedit')) {
