@@ -2,6 +2,8 @@ translateOnLoad = false;
 
 jq(document).ready(function() {
     spanclassAM = true;
+    mathcolor = "black";
+    mathfontsize = "1.2em";
     translate(spanclassAM);
 
     var script = document.createElement("script");
